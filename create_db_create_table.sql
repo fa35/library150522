@@ -1,5 +1,5 @@
 -- @license: GPLv2
--- @author: Corinna Rohr alias lux finis alias luxfinis alias tarraft
+-- @author: luxfinis
 
 CREATE DATABASE [Library]
  CONTAINMENT = NONE

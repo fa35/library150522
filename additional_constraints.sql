@@ -1,5 +1,5 @@
 -- @license: GPLv2
--- @author: Corinna Rohr
+-- @author: luxfinis
 
 -- Oeffnungszeiten: von < bis
 USE [Library]

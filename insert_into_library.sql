@@ -1,5 +1,5 @@
--- @license: GPLv2
--- @author: Corinna Rohr
+﻿-- @license: GPLv2
+-- @author: luxfinis
 
 USE [Library]
 GO
