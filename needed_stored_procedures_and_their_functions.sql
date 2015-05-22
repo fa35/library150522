@@ -1,4 +1,4 @@
--- @license: GPLv2
+﻿-- @license: GPLv2
 -- @author: luxfinis
 -- @source: github/luxfinis
 
@@ -119,13 +119,22 @@ DECLARE @mitarbeiter bit = Library.dbo.GetMitarbeiterRecht(@ausweisNr)
 		END
 	ELSE
 		BEGIN
+
+			PRINT 'Pruefe auf Buch-Autor-Beziehung'
+			DECLARE @relExist bit = Library.dbo.CheckBookToAutorRelation(@isbn)
+
+			IF @relExist = 0
+			BEGIN
+				EXEC sp_CreateUnknownAutorBookRelation @isbn
+			END
+
 			DECLARE @fachgebiet int = (select f_fachgebiet_id from Buecher where p_ISBN = @isbn)
 			DECLARE @signature varchar(10) = dbo.CreateSignature(@fachgebiet, @isbn);
 
 			IF(@signature IS NULL OR LEN(@signature) < 10)
 			BEGIN
 				DECLARE @anzExem int = ((select  count(*) from Exemplare) +1)
-				SET @signature = 'UNKN' + @anzExem
+				SET @signature = Concat('UNKN', @anzExem)
 			END
 			INSERT INTO [Exemplare] ([p_signatur], [f_ISBN]) VALUES (@signature, @isbn)
 		END
@@ -214,7 +223,7 @@ USE[Library]
 GO
 CREATE PROCEDURE sp_DeleteNutzer @ausweisNr int, @personenId int
 AS
-DECLARE @mitarbeiter bit = dbo.GetMitarbeiterBit(@ausweisNr);
+DECLARE @mitarbeiter bit = Library.dbo.GetMitarbeiterRecht(@ausweisNr);
 IF (@mitarbeiter = 0)
 	BEGIN 
 		PRINT 'Sie sind nicht berechtigt'
@@ -242,7 +251,7 @@ GO
 -- @source: github/luxfinis
 
 
--- Funktion GetMitarbeiterBit notwendig
+-- Funktion GetMitarbeiterRecht notwendig
 
 USE [Library]
 GO
@@ -313,7 +322,7 @@ USE [Library]
 GO
 CREATE PROCEDURE sp_CreateAutor @ausweisNr int, @vorname nvarchar(max), @nachname nvarchar(max)
 AS
-IF (dbo.GetMitarbeiterBit(@ausweisNr) = 0)
+IF (Library.dbo.GetMitarbeiterRecht(@ausweisNr) = 0)
 	BEGIN 
 		PRINT 'Sie sind nicht berechtigt'
 	END
@@ -742,7 +751,7 @@ USE[Library]
 GO
 CREATE PROCEDURE sp_BestelleBuchVor (@isbn bigint, @ausweisNr int)
 AS
-DECLARE @gesperrt bit = Library.dbo.GetAusweisGesperrt (@ausweisNr)
+DECLARE @gesperrt bit = Library.dbo.CheckAusweisGesperrt (@ausweisNr)
 
 IF(@gesperrt = 1)
 BEGIN
@@ -803,3 +812,118 @@ ELSE
 	BEGIN
 		RETURN 0;
 	END
+GO
+
+
+-- create book to autor relation
+
+
+-- @license: GPLv2
+-- @author: luxfinis
+-- @source: github/luxfinis
+
+
+USE [Library]
+GO
+CREATE PROCEDURE sp_CreateBookToAutorRelation (@isbn bigint, @autorId int)
+AS
+BEGIN
+	DECLARE @result bit, @count int
+
+	PRINT 'Fuege neuen Datensatz Buecher_Autoren hinzu'
+	
+	INSERT INTO [dbo].[Buecher_Autoren] ([pf_autor_id],[pf_isbn])
+    VALUES (@autorId, @isbn)
+
+	SET @count = (select count(*) from Buecher_Autoren where pf_isbn = @isbn)
+
+	IF(@count > 0)
+		BEGIN
+			PRINT 'Einfuegen erfolgreich'
+		END
+	ELSE
+		BEGIN
+			PRINT 'Fehler beim Hinzufuegen eines neuen Autoren - Buecher - Verbindung'
+		END
+END
+GO
+
+
+-- check for relation between book and autor
+
+
+USE [Library]
+GO
+CREATE FUNCTION CheckBookToAutorRelation (@isbn bigint)
+RETURNS BIT
+AS
+BEGIN
+	DECLARE @result bit, @count int
+	SET @count = (select count(*) from Buecher_Autoren where pf_isbn = @isbn)
+
+	IF(@count > 0)
+		BEGIN
+			SET @result = 1; -- relation vorhanden
+		END
+	ELSE
+		BEGIN
+			SET @result = 0; -- nicht vorhanden
+		END
+	RETURN @result;
+END
+GO
+
+
+
+
+--- unknown autor - book relation creation
+
+
+USE [Library]
+GO
+CREATE PROCEDURE sp_CreateUnknownAutorBookRelation (@isbn bigint)
+AS
+BEGIN
+	DECLARE @result bit, @count int
+	
+	DECLARE @vname varchar(max) = 'unknown_firstname', @nname varchar(max) = 'unknown_lastname'
+	DECLARE @number int =( (select count(*) from Autoren) + 47)
+
+	PRINT 'Pruefe ob Unknown-Autor existiert'
+
+	DECLARE @exists int = (select count(*) from Autoren where vorname = @vname and name = @nname)
+
+	IF @exists > 0
+	BEGIN
+		PRINT 'Fuege UnKnown-Autor hinzu'
+		INSERT INTO [dbo].[Autoren] ([p_autor_id], [vorname], [name])
+		VALUES (@number, @vname, @nname)
+
+		PRINT 'Fuege Beziehung hinzu'
+		INSERT INTO [dbo].[Buecher_Autoren] ([pf_autor_id],[pf_isbn])
+		VALUES (@number, @isbn)
+	END
+	ELSE
+		BEGIN
+			SET @number = (select p_autor_id from Autoren where vorname = @vname and name = @nname)
+		END
+
+	PRINT 'Fuege Beziehung hinzu'
+	INSERT INTO [dbo].[Buecher_Autoren] ([pf_autor_id],[pf_isbn])
+	VALUES (@number, @isbn)
+
+	SET @count = (select count(*) from Buecher_Autoren where pf_isbn = @isbn)
+
+	IF(@count > 0)
+		BEGIN
+			PRINT 'Einfuegen erfolgreich'
+		END
+	ELSE
+		BEGIN
+			PRINT 'Fehler beim Hinzufuegen eines neuen Autoren - Buecher - Verbindung'
+		END
+END
+GO
+
+
+

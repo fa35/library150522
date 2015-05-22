@@ -1,5 +1,6 @@
 ﻿-- @license: GPLv2
 -- @author: luxfinis
+-- @source: github/luxfinis
 
 USE [Library]
 GO
@@ -50,7 +51,7 @@ INSERT INTO Nutzer
 (p_personen_id, mitarbeiter, vorname, name, geburtsdatum, kontostand)
 VALUES
 (1, 0, 'Melanie', 'Weißer', '14.12.1987', 200), (2, 1, 'Bruno', 'Krög', '22.07.1967', 0),
-(3, 0, 'Nadine', 'Siefert', '02.01.1977', 0), (4, 0, 'George', 'Meister', '18.11.1990', 200),
+(3, 0, 'Nadine', 'Siefert', '02.01.1977', 0), (4, 0, 'George', 'Meister', '18.11.1990', 1000),
 (5, 1, 'Moritz', 'Fischer', '03.03.1985', 0), (6, 0, 'Henry', 'Lombard', '11.04.1984', 500)
 GO
 

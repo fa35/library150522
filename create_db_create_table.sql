@@ -1,5 +1,6 @@
 -- @license: GPLv2
 -- @author: luxfinis
+-- @source: github/luxfinis
 
 CREATE DATABASE [Library]
  CONTAINMENT = NONE

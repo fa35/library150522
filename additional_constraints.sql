@@ -1,5 +1,6 @@
 -- @license: GPLv2
 -- @author: luxfinis
+-- @source: github/luxfinis
 
 -- Oeffnungszeiten: von < bis
 USE [Library]
