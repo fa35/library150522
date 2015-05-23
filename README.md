@@ -1,7 +1,7 @@
 ## library150522 ##
 fresh updated version of fa35/Library150329 at GitHub
 
-#### this repository is under ga2 licensed ####
+#### this repository is under GPLv2 licensed ####
 
 #### copy, paste and execute in this order: ####
 
