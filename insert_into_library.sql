@@ -17,7 +17,7 @@ INSERT INTO [Oeffnungszeiten] ([p_wochentag], [von], [bis], [pf_bibliothek_id]) 
 GO
 
 INSERT INTO Fachgebiete ( p_fachgebiet_id, name, kuerzel )
-VALUES ( 1, 'Programmierung', 'PROG' ), ( 2, 'Wissen', 'WISP'), (3, 'Sport', 'SPOR'), (4, 'Sport', 'SPOC'), (5, 'Wissen', 'WISL')
+VALUES ( 1, 'Programmierung', 'PROP' ), ( 2, 'Wissen', 'WISP'), (3, 'Sport', 'SPOR'), (4, 'Sport', 'SPOC'), (5, 'Wissen', 'WISL')
 GO
 
 INSERT INTO [dbo].[Buecher] ([p_ISBN], [titel], [f_fachgebiet_id])
@@ -34,10 +34,6 @@ VALUES ( 3897215675, 'Weniger schlecht programmieren', 1 ),
 (3518260432, 'Die stille Revolution: Wie Algorithmen Wissen, Arbeit, Öffentlichkeit und Politik verändern, ohne dabei viel Lärm zu machen (edition unseld)', 1)
 GO
 
---INSERT INTO Exemplare ( p_signatur, f_ISBN )
---VALUES ('WISP0001', 3499624249), ('WISP0002', 3499624249)
---GO
-
 INSERT INTO Autoren ( p_autor_id, vorname, name)
 VALUES (1, 'Kathrin', 'Passig'), (2, 'Peter', 'Lustig'), (3, 'Hannelore', 'Haberstroh'), (4, 'Ronda', 'Rousey'), (5, 'Gina', 'Carano')
 GO
@@ -50,20 +46,29 @@ GO
 INSERT INTO Nutzer
 (p_personen_id, mitarbeiter, vorname, name, geburtsdatum, kontostand)
 VALUES
-(1, 0, 'Melanie', 'Weißer', '14.12.1987', 200), (2, 1, 'Bruno', 'Krög', '22.07.1967', 0),
+(1, 0, 'Melanie', 'Weißer', '14.12.1987', 1000), (2, 1, 'Bruno', 'Krög', '22.07.1967', 0),
 (3, 0, 'Nadine', 'Siefert', '02.01.1977', 0), (4, 0, 'George', 'Meister', '18.11.1990', 1000),
 (5, 1, 'Moritz', 'Fischer', '03.03.1985', 0), (6, 0, 'Henry', 'Lombard', '11.04.1984', 500)
 GO
 
---INSERT INTO Ausgeliehene_Exemplare (pf_signatur, pf_personen_id, rueckgabe_datum, anzahl_verlaengerungen)
---VALUES ('WISP0001', 4, '24.02.2015', 0)
---GO
-
---INSERT INTO Vorbestellte_Buecher (pf_isbn, pf_personen_id)
---VALUES (3897215675, 5)
---GO
-
-INSERT INTO Ausweise (pf_personen_id, ausweisnr, passwort, gueltigBis, gesperrt)
-VALUES (1, 1, 'fish', '01.01.2020', 0), (2, 2, 'gammelf', '01.01.2018', 0) ,
+INSERT INTO Ausweise (pf_personen_id, ausweisnr, passwort, gueltigBis, gesperrt)3499622300	4
 (3, 3, 'sh324', '01.01.2025', 0), (4, 4, '6a54df', '01.01.2016', 0),
 (5, 5, 'is325h', '01.01.2012', 1), (6, 6, 'fasf23h', '01.01.2013', 1)
+
+INSERT INTO Exemplare ( p_signatur, f_ISBN )
+VALUES ('WISP1', 3499624249), ('WISL1', 3499622300), ('WISL2', 3499622300), ('SPOR2', 1490342532), ('SPOR3', 1490342532), ('SPOR1', 1490342532),
+('SPOR4', 1941393268), ('SPOR5', 1941393268), ('SPOC1', 1488544786), ('SPOC2', 1488544786), ('SPOC3', 1488544786), ('SPOC4', 1488544786),
+('WISP2', 3499624249), ('SPOC5', 1600785451), ('SPOC6', 1600785451), ('SPOC6', 1633231472), ('SPOC7', 1633231472), ('SPOC8', 1633231472) ,
+('PROP1', 3518260432), ('PROP2', 3518260432), ('PROP3', 3518260432), ('PROP4', 3871346985), ('PROP5', 3871347558), ('PROP56', 3871347558),
+('PROP7', 3871347558)
+GO
+
+INSERT INTO Ausgeliehene_Exemplare (pf_signatur, pf_personen_id, rueckgabe_datum, anzahl_verlaengerungen)
+VALUES ('PROP3', 1, '30.05.2015', 0), ('SPOC1', 4, '30.05.2015', 0), ('SPOR3', 3, '30.05.2015', 0), ('PROP7', 3, '30.05.2015', 0)
+GO
+
+
+INSERT INTO Vorbestellte_Buecher (pf_isbn, pf_personen_id)
+VALUES (3499622300, 4)
+GO
+
