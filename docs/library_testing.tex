@@ -1,0 +1,102 @@
+\documentclass[mathserif]{beamer}
+% \usetheme{Berkeley}
+\usetheme{Goettingen}
+% \usetheme{Boadilla}
+%============================================================
+% Pakete
+%============================================================
+
+%Schriftkodierung
+\usepackage[T1]{fontenc} % sehr nützlich, Eingabe von Zeichen und so, vor inputenc
+\usepackage[utf8]{inputenc} % sehr nützlich, Eingabe von Zeichen und so
+\usepackage[ngerman,english]{babel} % sehr nützlich, deutsches Wörterbuch, neu Rechtschreibung, deutsche Silbentrennung, etc.
+\usepackage{amsmath,amssymb,bm,amsfonts} % sehr nützlich, Mathe-Formeln
+%\usepackage{tabls} %optional, mehr Funktionen für Tabellen
+% \usepackage{pslatex} %ps-Schriften einbinden - Andere Schriftart?
+%\usepackage{dsfont}
+% \usepackage{bbold}
+%\usepackage{fancyhdr} %Header selbst gestalten, siehe: http://www.andy-roberts.net/misc/latex/latextutorial8.html
+% \usepackage{pdfpages}
+% Grafiken einbinden
+\usepackage{epstopdf}
+\usepackage{graphicx} %optional, Bilder einbinden, nicht ganz intuitiv, hier gibt's erklärungen: http://userpage.fu-berlin.de/mh090188/Latex-Skript.pdf
+% \usefonttheme{serif}
+% \usepackage{helvet}
+\usepackage{perpage}
+\MakePerPage{footnote}
+\usepackage{color}
+\usepackage{caption}
+\usepackage{listings}
+
+\usepackage{pifont}
+\usepackage{calc}
+\usepackage{rotating}
+% \usepackage{tcolorbox}
+\usepackage{multirow}
+\usepackage{soul}
+
+\usepackage{colortbl}
+
+\definecolor{mydarkgrey}{rgb}{0.45,0.45,0.45}
+\newcommand<>{\dgrey}{\color#1{mydarkgrey}}
+
+
+\newenvironment{alphafootnotes}
+{\par\edef\savedfootnotenumber{\number\value{footnote}}
+	\renewcommand{\thefootnote}{$\star$}
+	\setcounter{footnote}{0}}
+{\par\setcounter{footnote}{\savedfootnotenumber}}
+
+
+
+\title[MSSQL testing] % (optional, only for long titles)
+{Tests gespeicherter Prozeduren}
+\subtitle{}
+\author[Große, Rohr:\\
+OSZ IMT] % (optional, for multiple authors)
+{Michael~Große\inst{1}\footnote[frame]{\href{mailto:mic.grosse+fa35@googlemail.com}{mic.grosse+fa35@googlemail.com}}\\Corinna~Rohr\inst{1}}
+\institute[HU Berlin] % (optional)
+{
+	\inst{1}%
+	Oberstufenzentrum Informations- und Medizintechnik
+}
+\date[2015-06-12] % (optional)
+{Anwendungssysteme}
+\subject{MS SQL}
+\usepackage{DejaVuSansMono}
+\lstset{language=SQL,
+	breaklines=true,
+	basicstyle=\tiny\ttfamily,
+	showstringspaces=false,
+	keywordstyle=\bfseries\color{green!40!black},
+	commentstyle=\itshape\color{purple!40!black},
+	identifierstyle=\color{blue},
+	stringstyle=\color{orange},
+	numberstyle=\color{mygray},
+	stepnumber=1,
+	}
+
+\setbeamertemplate{footline}[frame number]
+
+\begin{document}
+\begin{frame}
+	\begin{alphafootnotes}
+		\titlepage
+	\end{alphafootnotes}
+	
+\end{frame}
+
+\begin{frame}[fragile]
+	\lstinputlisting[language=SQL, firstline=565, lastline=578] {../needed_stored_procedures_and_their_functions.sql}
+\end{frame}
+
+\begin{frame}
+	\lstinputlisting[language=SQL, firstline=7, lastline=20] {../test_data_sp_f/sp_TestJahresLeihGebuehrAendern.sql}
+\end{frame}
+
+\begin{frame}
+	\lstinputlisting[language=SQL, firstline=22, lastline=46] {../test_data_sp_f/sp_TestJahresLeihGebuehrAendern.sql}
+\end{frame}
+
+
+\end{document}
